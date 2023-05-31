@@ -2,10 +2,12 @@
 using namespace std;
 typedef struct Node
 {
+    //each node a parent value and a rank
     int parent;
     int rank;
 }node;
 
+//gives the absolute patent nodes(root)
 int find(int v,vector<node> &nodes){
     if(nodes[v].parent==-1){
         return v;
@@ -15,6 +17,7 @@ int find(int v,vector<node> &nodes){
     }
 }
 
+//performing union of both nodes 
 void unionbyrank(int fromp,int top,vector<node> &nodes){
     if(fromp>top){
             nodes[top].parent = fromp;
@@ -22,7 +25,10 @@ void unionbyrank(int fromp,int top,vector<node> &nodes){
         else if(top>fromp){
             nodes[fromp].parent = top; 
         }
+
+        //rank of new parent will increase
         else{
+            //from will point to if same(convenience)
             nodes[fromp].parent = top;
             nodes[top].rank++;
         }
@@ -30,13 +36,17 @@ void unionbyrank(int fromp,int top,vector<node> &nodes){
 
 bool iscyclic(vector<pair<int,int>> &edgelist,vector<node> &nodes){
     for(pair<int,int> e : edgelist){
+
+        //get the abs parent of both nodes
         int fromp = find(e.first,nodes);
         int top = find(e.second,nodes);
 
+        //there exists a cycle if both have same parent
         if(fromp==top){
             return true;
         }
         else{
+            //unify them
             unionbyrank(fromp,top,nodes);
         }
     }
@@ -46,6 +56,8 @@ bool iscyclic(vector<pair<int,int>> &edgelist,vector<node> &nodes){
 
 
 int main(){
+    // we need a vector of nodes
+    // and a vector of edges
     vector<node> nodes;
     vector<pair<int,int>> edgelist;
 
